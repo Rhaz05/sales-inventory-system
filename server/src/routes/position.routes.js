@@ -1,6 +1,17 @@
 import express from 'express'
-import { getPositions } from '../controller/position.controller.js'
+import {
+  getPosition,
+  getPositionById,
+  createPosition,
+  updatePosition,
+} from '../controller/position.controller.js'
 
 export const positionRouter = express.Router()
 
-positionRouter.get('/', getPositions)
+positionRouter.get('/', getPosition)
+
+positionRouter.get('/:id', getPositionById)
+
+positionRouter.post('/', createPosition)
+
+positionRouter.put('/', updatePosition)

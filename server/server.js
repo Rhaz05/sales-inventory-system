@@ -5,6 +5,7 @@ import { loggerMiddleware } from './src/middlewares/logger.middleware.js'
 import { initRoutes } from './src/startup/routes.startup.js'
 import { initStaticFiles } from './src/startup/staticFiles.startup.js'
 import { checkConnection } from './src/database/sql.database.js'
+import { initDocs } from './src/startup/docs.startup.js'
 
 const app = express()
 
@@ -20,6 +21,9 @@ const serverStart = async () => {
 
   logger.info('Initializing routes')
   initRoutes(app)
+
+  logger.info('Initializing docs')
+  initDocs(app)
 
   const server = app.listen(CONFIG.NODE_PORT, () => {
     logger.info(`Server listening on port ${CONFIG.NODE_PORT}`)
