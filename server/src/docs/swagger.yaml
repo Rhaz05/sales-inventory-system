@@ -18,7 +18,7 @@ paths:
     post:
       tags:
         - Auth
-      summary: User login
+      summary: User Login
       requestBody:
         required: true
         content:
@@ -60,6 +60,34 @@ paths:
                     type: string
                     description: Error message
                     example: 'Invalid username or password'
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Get Server status
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      uptime:
+                        type: number
+                        description: Server Uptime
+                        example: 0.001
+                      Status:
+                        type: string
+                        description: Server Status
+                        example: Ok
+                      date:
+                        type: string
+                        description: Server Date
+                        example: '2024-08-30T06:57:37.012Z'
   /position:
     get:
       tags:
@@ -87,8 +115,8 @@ paths:
                       type: string
                       description: Position Created At
                       example: '2024-08-31 14:42'
-        '404':
-          description: Not Found
+        '500':
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -97,4 +125,4 @@ paths:
                   message:
                     type: string
                     description: Error message
-                    example: 'Error retrieving positions'
+                    example: 'Internal Server Error'
