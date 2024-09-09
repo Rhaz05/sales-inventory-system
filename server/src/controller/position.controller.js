@@ -42,7 +42,7 @@ export const createPosition = async (req, res) => {
     const exist = await Check(`SELECT * FROM position WHERE name = ?`, [positionName])
 
     if (exist) {
-      return res.status(400).json({ message: 'Position already exist' })
+      return res.status(422).json({ message: 'Position already exist' })
     }
 
     const response = await Query('INSERT INTO `position` (name, created_at) VALUES (?, ?)', [

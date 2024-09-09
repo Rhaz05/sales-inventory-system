@@ -39,7 +39,7 @@ export const createUser = async (req, res) => {
     )
 
     if (exist) {
-      return res.status(400).json({ message: 'Credentials already exist' })
+      return res.status(422).json({ message: 'Credentials already exist' })
     }
 
     const hash = await bcrypt.hash(password, 10)

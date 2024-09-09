@@ -45,10 +45,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  userId:
                     type: string
-                    description: Login message
-                    example: Login Successful
+                    description: User ID
+                    example: HlAwa3eLFKjUkzyu1nkPE
+                  fullName:
+                    type: string
+                    description: Full Name
+                    example: John Doe
         '401':
           description: Unauthorized
           content:
@@ -115,6 +119,682 @@ paths:
                       type: string
                       description: Position Created At
                       example: '2024-08-31 14:42'
+                    isActive:
+                      type: boolean
+                      description: Position is Active
+                      example: 1
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    post:
+      tags:
+        - Position
+      summary: Create Position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                positionName:
+                  type: string
+                  description: The name of the position
+                  example: 'Manager'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Position Created
+                    example: 'Position created successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Position already exist'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+  /position/{id}:
+    get:
+      tags:
+        - Position
+      summary: Get Position by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Position ID
+          example: 100001
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: Position ID
+                    example: 100001
+                  name:
+                    type: string
+                    description: Position Name
+                    example: Manager
+                  createdAt:
+                    type: string
+                    description: Position Created At
+                    example: '2024-08-31 14:42'
+                  isActive:
+                    type: boolean
+                    description: Position is Active
+                    example: 1
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Position Not Found'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    put:
+      tags:
+        - Position
+      summary: Update Position
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Position ID
+          example: 100001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                positionName:
+                  type: string
+                  description: The name of the position
+                  example: 'Manager'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Position Updated
+                    example: 'Position Updated successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Position Not Found'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+  /role:
+    get:
+      tags:
+        - Role
+      summary: Get all roles
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Role ID
+                      example: 100000
+                    name:
+                      type: string
+                      description: Role Name
+                      example: Admin
+                    createdAt:
+                      type: string
+                      description: Role Created At
+                      example: '2024-08-31 14:42'
+                    isActive:
+                      type: boolean
+                      description: Role is Active
+                      example: 1
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    post:
+      tags:
+        - Role
+      summary: Create Role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleName:
+                  type: string
+                  description: The name of the role
+                  example: 'Admin'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Role Created
+                    example: 'Role created successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Role already exist'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+  /role/{id}:
+    get:
+      tags:
+        - Role
+      summary: Get Role by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Role ID
+          example: 100000
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: message
+                    example: 'Role Updated successfully'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Role Not Found'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    put:
+      tags:
+        - Role
+      summary: Update Role
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Role ID
+          example: 100000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleName:
+                  type: string
+                  description: The name of the role
+                  example: 'Admin'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Role Updated
+                    example: 'Role Updated successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Role Not Found'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+  /branch:
+    get:
+      tags:
+        - Branch
+      summary: Get all branches
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Branch ID
+                      example: 100000
+                    name:
+                      type: string
+                      description: Branch Name
+                      example: Main
+                    address:
+                      type: string
+                      description: Branch Address
+                      example: '123 Main Street'
+                    contact:
+                      type: string
+                      description: Branch Contact
+                      example: '+1234567890'
+                    email:
+                      type: string
+                      description: Branch Email
+                      example: 'branch@example.com'
+                    createdAt:
+                      type: string
+                      description: Branch Created At
+                      example: '2024-08-31 14:42'
+                    isActive:
+                      type: boolean
+                      description: Branch is Active
+                      example: 1
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    post:
+      tags:
+        - Branch
+      summary: Create Branch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branchName:
+                  type: string
+                  description: The name of the branch
+                  example: 'Main'
+                branchAddress:
+                  type: string
+                  description: The address of the branch
+                  example: '123 Main Street'
+                branchContact:
+                  type: string
+                  description: The contact of the branch
+                  example: '+1234567890'
+                branchEmail:
+                  type: string
+                  description: The email of the branch
+                  example: 'branch@example.com'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Branch Created
+                    example: 'Branch created successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Branch already exist'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: User ID
+                      example: HlAwa3eLFKjUkzyu1nkPE
+                    fullName:
+                      type: string
+                      description: Full Name
+                      example: John Doe
+                    email:
+                      type: string
+                      description: Email
+                      example: johndoe@example.com
+                    branch:
+                      type: string
+                      description: Branch
+                      example: Main
+                    role:
+                      type: string
+                      description: Role
+                      example: Admin
+                    position:
+                      type: string
+                      description: Position
+                      example: Manager
+                    createdAt:
+                      type: string
+                      description: User Created At
+                      example: '2024-08-31 14:42'
+                    isActive:
+                      type: boolean
+                      description: User is Active
+                      example: 1
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'Internal Server Error'
+    post:
+      tags:
+        - User
+      summary: Create User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  description: The username of the user
+                  example: 'john_doe'
+                password:
+                  type: string
+                  description: The password of the user
+                  example: 'p@ssw0rd'
+                fullName:
+                  type: string
+                  description: The full name of the user
+                  example: 'John Doe'
+                email:
+                  type: string
+                  description: The email of the user
+                  example: 'johndoe@example.com'
+                roleId:
+                  type: integer
+                  description: The role id of the user
+                  example: 100000
+                positionId:
+                  type: integer
+                  description: The position id of the user
+                  example: 100001
+                branchId:
+                  type: integer
+                  description: The branch id of the user
+                  example: 100000
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: User Created
+                    example: 'User created successfully'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'All fields are required'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                    example: 'User already exist'
         '500':
           description: Internal Server Error
           content:

@@ -42,7 +42,7 @@ export const createRole = async (req, res) => {
     const exist = await Check(`SELECT * FROM role WHERE name = ?`, [roleName])
 
     if (exist) {
-      return res.status(400).json({ message: 'Role already exist' })
+      return res.status(422).json({ message: 'Role already exist' })
     }
 
     const response = await Query(`INSERT INTO role (name, created_at) VALUES (?, ?)`, [
