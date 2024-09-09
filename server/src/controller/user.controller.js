@@ -1,12 +1,16 @@
 import { Query, SelectAll, Check, Transaction } from '../database/sql.database.js'
 import { logger } from '../util/logger.util.js'
 import { nanoid } from '../util/nano.util.js'
+import bcrypt from 'bcryptjs'
 import { getTimestamp, dateFormat } from '../util/date.util.js'
 
 export const getUsers = async (req, res) => {
   try {
-    const response = await SelectAll('user', 'u_')
-    res.status(200).json(response)
+    const response = await SelectAll('users')
+    if (response.length == 0) {
+      return res.status(404).json({ message: 'No Users available' })
+    }
+    return res.status(200).json(response)
   } catch (error) {
     logger.error(error)
     res.status(500).json({ message: 'Internal Server Error' })
@@ -23,7 +27,7 @@ export const createUser = async (req, res) => {
     }
 
     const exist = await Check(
-      `SELECT * FROM user WHERE user_name = ? OR email = ? OR full_name = ?`,
+      `SELECT * FROM users WHERE user_name = ? OR email = ? OR full_name = ?`,
       [userName, email, fullName]
     )
 
@@ -31,10 +35,10 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: 'Credentials already exist' })
     }
 
-    const hash = await bcrypt.hash(password, '10')
+    const hash = await bcrypt.hash(password, 10)
 
     await Query(
-      `INSERT INTO user (id, full_name, user_name, password, email, role_id, position_id, branch_id, created_at)
+      `INSERT INTO users (id, full_name, user_name, password, email, role_id, position_id, branch_id, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         userId,
@@ -51,7 +55,7 @@ export const createUser = async (req, res) => {
 
     return res.status(200).json({ message: 'User created successfully' })
   } catch (error) {
-    logger.error(error)
+    console.log(error)
     res.status(500).json({ message: 'Internal Server Error' })
   }
 }

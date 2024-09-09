@@ -4,7 +4,7 @@ import { CONFIG } from '../config/env.config.js'
 
 const options = {
   store: new MongoStore({ mongoUrl: CONFIG.MONGODB_URl }),
-  name: 'sales-inventory-system-session',
+  name: CONFIG.SESSION_COOKIE_NAME,
   secret: CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,

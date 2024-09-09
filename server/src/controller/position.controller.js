@@ -45,7 +45,7 @@ export const createPosition = async (req, res) => {
       return res.status(400).json({ message: 'Position already exist' })
     }
 
-    const response = await Query(`INSERT INTO position (name, created_at) VALUES (?, ?)`, [
+    const response = await Query('INSERT INTO `position` (name, created_at) VALUES (?, ?)', [
       positionName,
       getTimestamp(dateFormat.withSeconds),
     ])

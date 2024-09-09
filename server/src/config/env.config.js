@@ -10,6 +10,7 @@ const envSchema = zod.object({
   DB_SCHEMA: zod.string(),
   MONGODB_URl: zod.string(),
   SESSION_SECRET: zod.string(),
+  SESSION_COOKIE_NAME: zod.string(),
 })
 
 const validatedEnv = envSchema.safeParse(process.env)
@@ -27,4 +28,5 @@ export const CONFIG = {
   DB_SCHEMA: validatedEnv.data.DB_SCHEMA,
   MONGODB_URl: validatedEnv.data.MONGODB_URl,
   SESSION_SECRET: validatedEnv.data.SESSION_SECRET,
+  SESSION_COOKIE_NAME: validatedEnv.data.SESSION_COOKIE_NAME,
 }

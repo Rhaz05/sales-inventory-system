@@ -1,17 +1,9 @@
 import { Query, SelectAll, Check, Transaction } from '../database/sql.database.js'
 import { logger } from '../util/logger.util.js'
 import bcrypt from 'bcryptjs'
+import { CONFIG } from '../config/env.config.js'
 
 export const login = async (req, res) => {
-  try {
-    return res.status(200).json({ message: 'Login successful' })
-  } catch (error) {
-    logger.error(error)
-    res.status(500).json({ message: 'Internal Server Error' })
-  }
-}
-
-export const signup = async (req, res) => {
   try {
     const { userName, password } = req.body
 
@@ -19,19 +11,43 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' })
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
+    const response = await Query('SELECT * FROM users WHERE user_name = ?', [userName])
+
+    if (response.length == 0) {
+      return res.status(404).json({ message: 'Invalid username or password' })
+    }
+
+    const { ...user } = response[0]
+    const hashedPassword = user.password
+
+    const isMatch = await bcrypt.compare(password, hashedPassword)
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid username or password' })
+    }
+
+    req.session.user = {
+      id: user.id,
+      fullName: user.fullName,
+    }
 
     return res.status(200).json({
-      message: 'Signup successful',
-      user: {
-        userName,
-        password: hashedPassword,
-      },
+      id: user.id,
+      fullName: user.fullName,
     })
   } catch (error) {
-    console.log(error)
     logger.error(error)
     res.status(500).json({ message: 'Internal Server Error' })
   }
+}
+
+export const logout = async (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Cannot destroy session')
+    }
+
+    res.clearCookie(CONFIG.SESSION_COOKIE_NAME)
+
+    res.sendStatus(204)
+  })
 }
