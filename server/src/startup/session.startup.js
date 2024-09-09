@@ -2,8 +2,6 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import { CONFIG } from '../config/env.config.js'
 
-console.log(CONFIG)
-
 const options = {
   store: new MongoStore({ mongoUrl: CONFIG.MONGODB_URl }),
   name: 'sales-inventory-system-session',
