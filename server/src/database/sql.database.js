@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise'
 import { CONFIG } from '../config/env.config.js'
 import { Normalize } from '../util/util.js'
+import { formatColumns } from '../util/format.util.js'
 
 const pool = mysql.createPool({
   host: CONFIG.DB_HOST,
@@ -38,14 +39,11 @@ export const Check = async (sql, params = []) => {
 }
 
 //@ Specific Select ALL no params
-export const SelectAll = async (tableName, prefix) => {
+export const SelectAll = async (tableName) => {
   try {
     const [result] = await pool.query(`SELECT * FROM ${tableName}`)
-    if (prefix) {
-      const data = Normalize(result, prefix)
-      return data
-    }
-    return result
+
+    return formatColumns(result)
   } catch (error) {
     console.error('Error executing query:', error)
     throw error
@@ -53,17 +51,14 @@ export const SelectAll = async (tableName, prefix) => {
 }
 
 //@ can be used for universal query SELECT, INSERT, UPDATE, DELETE
-export const Query = async (sql, params = [], prefix) => {
+export const Query = async (sql, params = []) => {
   try {
     const [result] = await pool.query(sql, params)
     if (sql.trim().toUpperCase().startsWith('INSERT')) {
       return { ...result, insertId: result.insertId }
     }
-    if (prefix && sql.trim().toUpperCase().startsWith('SELECT')) {
-      const data = Normalize(result, prefix)
-      return data
-    }
-    return result
+
+    return formatColumns(result)
   } catch (error) {
     console.error('Error executing query:', error)
     throw error

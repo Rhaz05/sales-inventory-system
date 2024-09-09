@@ -14,4 +14,4 @@ positionRouter.get('/:id', getPositionById)
 
 positionRouter.post('/', createPosition)
 
-positionRouter.put('/', updatePosition)
+positionRouter.put('/:id', updatePosition)
