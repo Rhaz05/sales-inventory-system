@@ -6,7 +6,14 @@ import { getTimestamp, dateFormat } from '../util/date.util.js'
 
 export const getUsers = async (req, res) => {
   try {
-    const response = await SelectAll('users')
+    const response =
+      await Query(`SELECT users.id as userId, users.full_name, users.user_name, users.email, branch.name as branch, 
+        r.name as role, p.name as position, users.created_at, users.is_active
+      FROM users 
+      INNER JOIN branch ON branch.id = users.branch_id
+      INNER JOIN position as p ON p.id = users.position_id
+      INNER JOIN role as r ON r.id = users.role_id;`)
+
     if (response.length == 0) {
       return res.status(404).json({ message: 'No Users available' })
     }
