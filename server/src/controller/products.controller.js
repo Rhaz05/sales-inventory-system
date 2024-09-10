@@ -17,6 +17,8 @@ export const getProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
+    let queries = []
+
     const {
       productName,
       productDescription,
@@ -37,8 +39,10 @@ export const createProduct = async (req, res) => {
       return res.status(422).json({ message: 'Product already exist' })
     }
 
+    const branches = await SelectAll('branch')
+
     const response = await Query(
-      `INSERT INTO products (name, description, price, cost, category_id, barcode, image, created_at) 
+      `INSERT INTO products (name, description, price, cost, category_id, barcode, image, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         productName,
@@ -51,6 +55,19 @@ export const createProduct = async (req, res) => {
         getTimestamp(dateFormat.withSeconds),
       ]
     )
+    const { insertId } = response
+
+    branches.forEach((branch) => {
+      const { id } = branch
+      const inventoryID = `${id}${insertId}`
+
+      queries.push({
+        sql: `INSERT INTO product_inventory (inventory_id, product_id, branch_id, quantity) VALUES (?, ?, ?, ?)`,
+        values: [inventoryID, insertId, id, 0],
+      })
+    })
+
+    await Transaction(queries)
 
     return res.status(200).json({ message: 'Product created successfully' })
   } catch (error) {
@@ -71,6 +88,9 @@ export const getProductById = async (req, res) => {
     return res.status(200).json(response[0])
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Internal Server Error' })
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: 'Please contact administrator or developers',
+    })
   }
 }

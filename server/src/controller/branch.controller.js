@@ -33,6 +33,7 @@ export const getBranchById = async (req, res) => {
 
 export const createBranch = async (req, res) => {
   try {
+    let queries = []
     const { branchName, branchAddress, branchContact, branchEmail } = req.body
 
     if (!branchName || !branchAddress || !branchContact || !branchEmail) {
@@ -49,6 +50,27 @@ export const createBranch = async (req, res) => {
       `INSERT INTO branch (name, address, contact, email, created_at) VALUES (?, ?, ?, ?, ?)`,
       [branchName, branchAddress, branchContact, branchEmail, getTimestamp(dateFormat.withSeconds)]
     )
+    const { insertId } = response
+
+    const products = await SelectAll('products')
+
+    products.forEach(async (product) => {
+      const { id } = product
+      const inventoryID = `${insertId}${id}`
+
+      const exist = await Check(`SELECT * FROM product_inventory WHERE inventory_id = ?`, [
+        inventoryID,
+      ])
+
+      if (!exist) {
+        queries.push({
+          sql: `INSERT INTO product_inventory (inventory_id, product_id, branch_id, quantity) VALUES (?, ?, ?, ?)`,
+          values: [inventoryID, id, insertId, 0],
+        })
+      }
+    })
+
+    await Transaction(queries)
 
     return res.status(200).json({ message: 'Branch created successfully' })
   } catch (error) {
