@@ -1,10 +1,10 @@
-import { Query, Check, Transaction } from '../database/sql.database.js'
+import { SelectAll, Query, Check, Transaction } from '../database/sql.database.js'
 import { logger } from '../util/logger.util.js'
 import { getTimestamp, dateFormat } from '../util/date.util.js'
 
 export const getCategory = async (req, res) => {
   try {
-    const response = await Query(`SELECT * FROM product_category`)
+    const response = await SelectAll('product_category')
     if (response.length == 0) {
       return res.status(404).json({ message: 'No Categories available' })
     }
