@@ -5,6 +5,7 @@ import { roleRouter } from '../routes/role.routes.js'
 import { branchRouter } from '../routes/branch.routes.js'
 import { userRouter } from '../routes/user.routes.js'
 import { auth } from '../middlewares/auth.middleware.js'
+import { categoryRouter } from '../routes/category.routes.js'
 
 export const initRoutes = (app) => {
   app.use('/auth', authRouter)
@@ -14,4 +15,5 @@ export const initRoutes = (app) => {
   app.use('/role', roleRouter)
   app.use('/branch', branchRouter)
   app.use('/user', userRouter)
+  app.use('/category', categoryRouter)
 }
