@@ -10,7 +10,7 @@ import { productsRouter } from '../routes/products.routes.js'
 
 export const initRoutes = (app) => {
   app.use('/auth', authRouter)
-  app.use(auth)
+  // app.use(auth)
   app.use('/health', healthRouter)
   app.use('/position', positionRouter)
   app.use('/role', roleRouter)

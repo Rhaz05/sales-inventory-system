@@ -79,25 +79,25 @@ export const createBranch = async (req, res) => {
   }
 }
 
-// export const updateBranch = async (req, res) => {
-//   try {
-//     const { id } = req.params
-//     const { branchName } = req.body
+export const updateBranch = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { branchName } = req.body
 
-//     if (!id || !branchName) {
-//       return res.status(400).json({ message: 'All fields are required' })
-//     }
+    if (!id || !branchName) {
+      return res.status(400).json({ message: 'All fields are required' })
+    }
 
-//     const exist = await Check(`SELECT * FROM branch WHERE id = ?`, [id])
+    const exist = await Check(`SELECT * FROM branch WHERE id = ?`, [id])
 
-//     if (!exist) {
-//       return res.status(404).json({ message: 'Branch Not Found' })
-//     }
+    if (!exist) {
+      return res.status(404).json({ message: 'Branch Not Found' })
+    }
 
-//     await Query(`UPDATE branch SET name = ? WHERE id = ?`, [branchName, id])
-//     return res.status(200).json({ message: 'Branch Updated successfully' })
-//   } catch (error) {
-//     console.log(error)
-//     res.status(500).json({ message: 'Internal Server Error' })
-//   }
-// }
+    await Query(`UPDATE branch SET name = ? WHERE id = ?`, [branchName, id])
+    return res.status(200).json({ message: 'Branch Updated successfully' })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+}
